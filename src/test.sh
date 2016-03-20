@@ -26,18 +26,25 @@ function run_test {
      
     
     #echo -n "$green|$nc ${cyan}$(printf '%-50s' $i) ["
-    diff <(echo "/tmp/sudoku.test") <(echo $solution) > /dev/null
+    diff /tmp/sudoku.test  $solution > /dev/null 2>&1
     
     if [ $? -eq 0 ] ; then
-        echo "${cyan}PASS${cyan}"  
+        printf "$green ************************$nc\n"
+        printf "$green| Test: $in_file Passed$nc\n"
+        printf "$green ************************$nc\n\n"
         passed=$(($passed + 1))
     else
-        printf "${red}FAIL${cyan}"  
+        printf "$red ************************$nc\n"
+        printf "$red| Test: $in_file Failed$nc\n"
+        
+
         failed=$(($failed + 1))
-        echo " + Expected:"
+        echo "${nc} + Expected:"
         cat $solution
         echo " + Got:"
         cat "/tmp/sudoku.test"
+        printf "\n$red ************************$nc\n\n"
+
     fi
     
     #rm /tmp/$$test*
