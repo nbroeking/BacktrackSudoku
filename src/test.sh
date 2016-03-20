@@ -39,7 +39,7 @@ function run_test {
         
 
         failed=$(($failed + 1))
-        echo "${nc} + Expected:"
+        printf "${nc} + Expected:\n"
         cat $solution
         echo " + Got:"
         cat "/tmp/sudoku.test"
@@ -57,7 +57,7 @@ for test_set in tests ; do
     for i in $tests ; do
         run_test $i
     done
-    echo -ne "${nc}"
+    printf "${nc}"
 done
 
 printf "$green+-----------------------------------------------------------+$nc\n" $test_set
