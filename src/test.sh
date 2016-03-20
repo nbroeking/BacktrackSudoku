@@ -22,6 +22,11 @@ function run_test {
         
     #echo -n "$green|$nc ${cyan}$(printf '%-50s' $i) ["
    
+    printf "$cyan************************$nc\n"
+    
+    printf "$cyan Testing: $in_file $nc"
+    printf "$cyan ........... $nc"
+
     python ./main.py $in_file > /tmp/sudoku.test
      
     
@@ -29,7 +34,6 @@ function run_test {
     diff /tmp/sudoku.test  $solution > /dev/null 2>&1
     
     if [ $? -eq 0 ] ; then
-        printf "$green ************************$nc\n"
         printf "$green| Test: $in_file Passed$nc\n"
         printf "$green ************************$nc\n\n"
         passed=$(($passed + 1))

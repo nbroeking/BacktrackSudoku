@@ -98,8 +98,11 @@ class Sudoku:
         #Each 3rd of the grid should not have any duplicate values
         bracketx = self.size/3
         brackety = self.size/3
-        for xoff in range(3):
-            for yoff in range(3):
+
+        outerLayer = 3
+
+        for xoff in range(outerLayer):
+            for yoff in range(outerLayer):
                 valid = set()
                 #print("Square set ", valid, "for", xoff, yoff)
                 for i in range(bracketx):
@@ -143,8 +146,11 @@ class Sudoku:
         #Ensure that every 3rd is fully filled in without duplicates
         bracketx = self.size/3
         brackety = self.size/3
-        for xoff in range(3):
-            for yoff in range(3):
+
+        outerLayer = 3
+
+        for xoff in range(outerLayer):
+            for yoff in range(outerLayer):
                 valid = set()
                 for i in range(bracketx):
                     for j in range(brackety):
