@@ -7,25 +7,46 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sudoku.backtrack as bt
 
+def getMatrixFromFile(file):
+    lines = [line.rstrip('\n') for line in open(file)]
+
+    matrix = []
+    for line in lines:
+        row = []
+        for num in line.split(","):
+             row.append(int(num))
+
+        matrix.append(row)
+    
+    return matrix
+ 
 def main(argc, argv):
-    print("Starting the backtracking sudoko solver tests")
+    #print("Starting the backtracking sudoko solver tests")
     
     #decide how many tests there are
 
     #Load the test names
 
-    trueAnswer = [[ 0, 1], [1, 0]]
+    #question = [ [0]*9 for _ in xrange(9) ] 
+    
+    if argc != 2:
+        print("Need to know the file")
+        sys.exit(1)
+    
+    question = getMatrixFromFile(argv[1])
 
-    question = [[ -1, -1], [ 1, 0]]
+    #print("Question", question)
 
     #For now we are going to use just one test and its going to be hardcoded
-    for test in range(1):
-        solver = bt.Sudoku(2)
-        answer = solver.solve(question)
-        print("Solution: ", answer);
-        #This is where we should validate
+    solver = bt.Sudoku(len(question))
+    answer = solver.solve(question)
+
+    if answer == None:
+        print("No solution found");
         
-    #This is where we should show menchmarks and stuff
-    
+    else:
+        #print("Solved")
+        solver.show(answer)
+        
 if __name__ == "__main__":
     main(len(sys.argv), sys.argv)
