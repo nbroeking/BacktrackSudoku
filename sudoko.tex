@@ -321,10 +321,61 @@ The accept subroutine looks very similar to reject but instead of determining if
 TODO:CITE
 
 \subsubsection{getIndecies}
+Get Indecies is a small subroutine that allows us to do a conversion between frame and indecies. Referencing the
+recursion from the box number then gaurentees that we have a max recustion depth of $n^4$ where the box matches the recurstion depth. 
+
+getIndecies takes a integer i and n and returns a tuple of the x and y indecies that corrispond to that frame.
+\begin{algorithm}
+\caption{getIndecies}\label{getIndecies}
+\begin{algorithmic}[1]
+\Procedure{getIndecies}
+\State return ( index / n^2, index % n^2)
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 
 \subsubsection{isempty}
 
+The is empty subroutine is used to check to see if any particular value in the matrix has been filled. 
+For the purposes of the algorithm we use 0 to represent empty and any value x where $0 < x \le n^2$ to be the value.
+
+Is empty takes a value, val that is taken from the matrix
+\begin{algorithm}
+\caption{isEmpty}\label{isEmpty}
+\begin{algorithmic}[1]
+\Procedure{isEmpty}
+\State return True ? val <= 0 : False
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+
 \subsubsection{deepCopy}
+The final subroutine is deep copy. A deep copy is used because by making a copy of the states then we can avoid having
+to keep a stack off the states we are looking for and instead are able to take advantage of the recursion stack.
+
+The deep copy subroutine takes a list of list as the Matrix G to make a copy of. 
+\begin{algorithm}
+\caption{deepCopy}\label{deepCopy}
+\begin{algorithmic}[1]
+\Procedure{deepCopy}
+\State G' = list()
+\For{ list l in G}
+\State listCopy = list()
+\For{ val v in l}
+\State listCopy.append(v)
+\EndFor
+\State G'.append(listCopy)
+\EndFor
+\State return G'
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Note: Its important to note that for the purposes of the implemntation I used the python libray copy for deep copys and did not implement this.
+
 
 %---------------------------------------------------
 \subsection{Correctness}
