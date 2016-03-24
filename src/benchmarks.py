@@ -45,10 +45,10 @@ def main(argc, argv):
     points = set()
 
     
-    for fakei in range(1, 5):
-        i = fakei*3
+    for fakei in range(1, 9):
+        i = fakei*fakei
 
-        solver = bt.Sudoku(i)
+        solver = bt.Sudoku()
         #question = [[0]*i] * i
 
         question = generate(i)
@@ -57,7 +57,7 @@ def main(argc, argv):
         solver.show(question)
 
         time1 = time.time()
-        answer = solver.solve(question)
+        answer = solver.solve(question, i)
         time2 = time.time()
 
         calcTime = time2 - time1

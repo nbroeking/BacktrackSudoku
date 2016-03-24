@@ -48,6 +48,9 @@
 \documentclass{sig-alternate}
   \pdfpagewidth=8.5truein
   \pdfpageheight=11truein
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
 
 \begin{document}
 %
@@ -107,7 +110,7 @@ Nicolas C. Broeking\\
        \affaddr{University of Colorado at Boulder}\\
        \affaddr{Advanced Algorithms}\\
        \affaddr{CSCI 5454}\\
-       \email{Rafaille Frongillo}
+       \email{nibr3402@colorado.edu}
 % 2nd. author
 }
 
@@ -126,119 +129,221 @@ I implemented a backtracking sudoko solver. Not yet actually but I really hope I
 \keywords{Sudoku, Search, Backtracking Search}
 
 \section{Introduction}
-The \textit{proceedings} are the records of a conference.
-ACM seeks to give these conference by-products a uniform,
-high-quality appearance.  To do this, ACM has some rigid
-requirements for the format of the proceedings documents: there
-is a specified format (balanced  double columns), a specified
-set of fonts (Arial or Helvetica and Times Roman) in
-certain specified sizes (for instance, 9 point for body copy),
-a specified live area (18 $\times$ 23.5 cm [7" $\times$ 9.25"]) centered on
-the page, specified size of margins (2.54cm [1"] top and
-bottom and 1.9cm [.75"] left and right; specified column width
-(8.45cm [3.33"]) and gutter size (.083cm [.33"]).
+Sudoku is a popular game played by puzzle enthusiasts all over the world where the player takes 
+a grid of size $n^2 x n^2$ with some values filled in and then tries to fill in the rest of the grid. TODO: CITATION
+I am able to apply a backtraking algorithm to solve the sudoku grid. 
 
-The good news is, with only a handful of manual
-settings\footnote{Two of these, the {\texttt{\char'134 numberofauthors}}
-and {\texttt{\char'134 alignauthor}} commands, you have
-already used; another, {\texttt{\char'134 balancecolumns}}, will
-be used in your very last run of \LaTeX\ to ensure
-balanced column heights on the last page.}, the \LaTeX\ document
-class file handles all of this for you.
+\section{Backtrack Solver for Sudoku}
 
-The remainder of this document is concerned with showing, in
-the context of an ``actual'' document, the \LaTeX\ commands
-specifically available for denoting the structure of a
-proceedings paper, rather than with giving rigorous descriptions
-or explanations of such commands.
+To play sudoku one first starts with a grid of size $n^2 x n^2$ where n is any integer $> 0$ however the most common game is 
+played when $n = 3$ or a 9x9 grid. The game maker can fill in some values or constraints and then the player has to fill in
+the remaining squares leaving the original constraints un touched. The player has won when the following conditions are met.
 
-\section{The {\secit Body} of The Paper}
-Typically, the body of a paper is organized
-into a hierarchical structure, with numbered or unnumbered
-headings for sections, subsections, sub-subsections, and even
-smaller sections.  The command \texttt{{\char'134}section} that
-precedes this paragraph is part of such a
-hierarchy.\footnote{This is the second footnote.  It
-starts a series of three footnotes that add nothing
-informational, but just give an idea of how footnotes work
-and look. It is a wordy one, just so you see
-how a longish one plays out.} \LaTeX\ handles the numbering
-and placement of these headings for you, when you use
-the appropriate heading commands around the titles
-of the headings.  If you want a sub-subsection or
-smaller part to be unnumbered in your output, simply append an
-asterisk to the command name.  Examples of both
-numbered and unnumbered headings will appear throughout the
-balance of this sample document.
+The premise of the game is simple find a solution where three rules are satisified.
+\begin{itemize}
+\item{All blocks are filled in with an integer x where $0 < x \le n^2$}
+\item{There are no duplicate numbers in a given row}
+\item{There are no duplicate numbers in a given col}
+\item{There are no duplicate numbers in any given sub square}
+\end{itemize}
+A subsquare can be defined as a group of non overlapping blocks of size $n^2$
 
-Because the entire article is contained in
-the \textbf{document} environment, you can indicate the
-start of a new paragraph with a blank line in your
-input file; that is why this sentence forms a separate paragraph.
+\subsection{Problem}
+The sudoku solving problem is an NP-Complete problem TODO:CITATION. We can take
+advantage of this fact to develop a backtracking algorithm to solve the problem. This solution
+essentially boils down to a graph coloring where each block is a node and a block can be colored any number x where $0 < x \le n^2$. TODO:CITATION
+As long as the coloring follows the rules of the game above. 
 
-\subsection{Type Changes and {\subsecit Special} Characters}
-We have already seen several typeface changes in this sample.  You
-can indicate italicized words or phrases in your text with
-the command \texttt{{\char'134}textit}; emboldening with the
-command \texttt{{\char'134}textbf}
-and typewriter-style (for instance, for computer code) with
-\texttt{{\char'134}texttt}.  But remember, you do not
-have to indicate typestyle changes when such changes are
-part of the \textit{structural} elements of your
-article; for instance, the heading of this subsection will
-be in a sans serif\footnote{A third footnote, here.
-Let's make this a rather short one to
-see how it looks.} typeface, but that is handled by the
-document class file. Take care with the use
-of\footnote{A fourth, and last, footnote.}
-the curly braces in typeface changes; they mark
-the beginning and end of
-the text that is to be in the different typeface.
+%---------------------------------------------------
+\subsection{Algorithm}
+The algorithm looks like such where G is the game matrix the box is the current node to color. The box number corisponds to the frame starting at the top left, box 0 and going to the bottom right box $n^2 - 1$ numbered horizontally.
+\begin{algorithm}
+\caption{Sudoku Backtracking}\label{solve}
+\begin{aglorithmic}[1]
+\Procedure{solve}{G}{box}
 
-You can use whatever symbols, accented characters, or
-non-English characters you need anywhere in your document;
-you can find a complete list of what is
-available in the \textit{\LaTeX\
-User's Guide}\cite{Lamport:LaTeX}.
+\If regect(G)
+\State return None
+\EndIf
 
-\subsection{Math Equations}
-You may want to display math equations in three distinct styles:
-inline, numbered or non-numbered display.  Each of
-the three are discussed in the next sections.
+\If accept(G)
+\State return G
+\EndIf
 
-\subsubsection{Inline (In-text) Equations}
-A formula that appears in the running text is called an
-inline or in-text formula.  It is produced by the
-\textbf{math} environment, which can be
-invoked with the usual \texttt{{\char'134}begin. . .{\char'134}end}
-construction or with the short form \texttt{\$. . .\$}. You
-can use any of the symbols and structures,
-from $\alpha$ to $\omega$, available in
-\LaTeX\cite{Lamport:LaTeX}; this section will simply show a
-few examples of in-text equations in context. Notice how
-this equation: \begin{math}\lim_{n\rightarrow \infty}x=0\end{math},
-set here in in-line math style, looks slightly different when
-set in display style.  (See next section).
+\If $box \ge n^4$
+\State return None
+\Endif
 
-\subsubsection{Display Equations}
-A numbered display equation -- one set off by vertical space
-from the text and centered horizontally -- is produced
-by the \textbf{equation} environment. An unnumbered display
-equation is produced by the \textbf{displaymath} environment.
+\State x, y = getIndecies(box, size)
 
-Again, in either environment, you can use any of the symbols
-and structures available in \LaTeX; this section will just
-give a couple of examples of display equations in context.
-First, consider the equation, shown as an inline equation above:
-\begin{equation}\lim_{n\rightarrow \infty}x=0\end{equation}
-Notice how it is formatted somewhat differently in
-the \textbf{displaymath}
-environment.  Now, we'll enter an unnumbered equation:
-\begin{displaymath}\sum_{i=0}^{\infty} x + 1\end{displaymath}
-and follow it with another numbered equation:
-\begin{equation}\sum_{i=0}^{\infty}x_i=\int_{0}^{\pi+2} f\end{equation}
-just to demonstrate \LaTeX's able handling of numbering.
+\If !self.isempty(G[x][y])
+\State return solve(G, box+1)
+\EndIf
 
+\State $G' = deepCopy(G)$
+
+\For{ index $i < n^2$}
+\State $G'$[x][y] = i
+\State solution = solve($G'$, box + 1)
+\If result !=None:
+\State return Result
+\EndIf
+\EndFor
+
+\State Return None
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+TODO:CITATION
+
+The above algorithm is dependent on the following sub routines
+
+%Reject sub routine
+The reject subroutine takes a Graph G and then checks to see if there is there is
+a possible solution given the State. For example if the graph passed to it has two threes in a single column then reject will return True saying that there is no solution because you can't have more than one of each number in any given column. 
+
+This subroutine is extremly powerful becuase it allows us to prune the tree for huge subtrees at a time. Given any two squares of the same value there are potentially $9^(n^4 - 2)$ sub states that can we don't need to search because we know they can't be valid. 
+
+The reject subroutine does stuff and looks like.
+\subsubsection{reject}
+\begin{algorithm}
+\caption{Reject}\label{reject}
+\begin{algorithmic}[1]
+\Procedure{reject}
+
+\For{ index $i < n^2$}
+\State $x = set()$
+\For{ index $j < n^2$}
+\If matrix[i][j] > 0
+\If matrix[i][j] in x
+\State return True
+\EndIf
+\State x.add(matrix[i][j])
+\EndIf
+\EndFor
+
+\For{ index $j < n^2$}
+\State $y = set()$
+\For{ index $i < n^2$}
+\If matrix[i][j] > 0
+\If matrix[i][j] in y
+\State return True
+\EndIf
+\State y.add(matrix[i][j])
+\EndIf
+\EndFor
+
+\For{ index $offsetx < n^2$}
+\For{ index $offsety < n^2$}
+\State valid = set()
+    \For{ index $i < n^2$}
+    \For{ index $j < n^2$}
+    \State indexX = offsetx*n + i
+    \State indexY = offsetY*n + j
+
+    \If $matrix[indexX][indexY] > 0$
+    \If matrix[indexx][indexy] in valid 
+    \State return True
+    \EndIf
+    \State valid.add(matrix[indexX][indexY]
+    \EndIf
+    
+    \EndFor
+    \EndFor
+\EndFor
+\EndFor
+\State return False
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+TODO:CITATION
+
+%Accept sub routine
+\subsubsection{accept}
+The accept subroutine looks very similar to reject but instead of determining if there is a possible solution it confims that G is a valid solution. Accept takes only G as a parameter. For accept to return true all of the conditions for the win must be satisfied. The algorithm looks like the following.
+
+\begin{algorithm}
+\caption{Accept}\label{accept}
+\begin{algorithmic}[1]
+\Procedure{accept}
+
+\For{ index $i < n^2$}
+\State $x = set()$
+\For{ index $j < n^2$}
+\If matrix[i][j] > 0
+\If matrix[i][j] in x
+\State return False
+\EndIf
+\State x.add(matrix[i][j])
+\Else
+\State return False
+\EndIf
+\EndFor
+
+\For{ index $j < n^2$}
+\State $y = set()$
+\For{ index $i < n^2$}
+\If matrix[i][j] > 0
+\If matrix[i][j] in y
+\State return False
+\EndIf
+\State y.add(matrix[i][j])
+\Else
+\State return False
+\EndIf
+\EndFor
+
+\For{ index $offsetx < n^2$}
+\For{ index $offsety < n^2$}
+\State valid = set()
+    \For{ index $i < n^2$}
+    \For{ index $j < n^2$}
+    \State indexX = offsetx*n + i
+    \State indexY = offsetY*n + j
+
+    \If $matrix[indexX][indexY] > 0$
+    \If matrix[indexx][indexy] in valid 
+    \State return False
+    \EndIf
+    \State valid.add(matrix[indexX][indexY]
+    \Else
+    \State return False
+    \EndIf
+    
+    \EndFor
+    \EndFor
+\EndFor
+\EndFor
+\State return True
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+TODO:CITE
+
+\subsubsection{getIndecies}
+
+\subsubsection{isempty}
+
+\subsubsection{deepCopy}
+
+%---------------------------------------------------
+\subsection{Correctness}
+
+%---------------------------------------------------
+\subsection{Runtime for size N}
+
+%---------------------------------------------------
+\subsection{Runtime for constraints}
+
+%---------------------------------------------------
+\subsection{Inputs} 
+
+%---------------------------------------------------
+\subsubsection{Inputs Worst Case}
+\subsubsection{Inputs Average Case}
+\subsubsection{Inputs Best Case}
+
+ 
 \subsection{Citations}
 Citations to articles \cite{bowman:reasoning,
 clark:pct, braams:babel, herlihy:methodology},
@@ -266,147 +371,6 @@ This article shows only the plainest form
 of the citation command, using \texttt{{\char'134}cite}.
 This is what is stipulated in the SIGS style specifications.
 No other citation format is endorsed or supported.
-
-\subsection{Tables}
-Because tables cannot be split across pages, the best
-placement for them is typically the top of the page
-nearest their initial cite.  To
-ensure this proper ``floating'' placement of tables, use the
-environment \textbf{table} to enclose the table's contents and
-the table caption.  The contents of the table itself must go
-in the \textbf{tabular} environment, to
-be aligned properly in rows and columns, with the desired
-horizontal and vertical rules.  Again, detailed instructions
-on \textbf{tabular} material
-is found in the \textit{\LaTeX\ User's Guide}.
-
-Immediately following this sentence is the point at which
-Table 1 is included in the input file; compare the
-placement of the table here with the table in the printed
-dvi output of this document.
-
-\begin{table}
-\centering
-\caption{Frequency of Special Characters}
-\begin{tabular}{|c|c|l|} \hline
-Non-English or Math&Frequency&Comments\\ \hline
-\O & 1 in 1,000& For Swedish names\\ \hline
-$\pi$ & 1 in 5& Common in math\\ \hline
-\$ & 4 in 5 & Used in business\\ \hline
-$\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
-\hline\end{tabular}
-\end{table}
-
-To set a wider table, which takes up the whole width of
-the page's live area, use the environment
-\textbf{table*} to enclose the table's contents and
-the table caption.  As with a single-column table, this wide
-table will ``float" to a location deemed more desirable.
-Immediately following this sentence is the point at which
-Table 2 is included in the input file; again, it is
-instructive to compare the placement of the
-table here with the table in the printed dvi
-output of this document.
-
-
-\begin{table*}
-\centering
-\caption{Some Typical Commands}
-\begin{tabular}{|c|c|l|} \hline
-Command&A Number&Comments\\ \hline
-\texttt{{\char'134}alignauthor} & 100& Author alignment\\ \hline
-\texttt{{\char'134}numberofauthors}& 200& Author enumeration\\ \hline
-\texttt{{\char'134}table}& 300 & For tables\\ \hline
-\texttt{{\char'134}table*}& 400& For wider tables\\ \hline\end{tabular}
-\end{table*}
-% end the environment with {table*}, NOTE not {table}!
-
-\subsection{Figures}
-Like tables, figures cannot be split across pages; the
-best placement for them
-is typically the top or the bottom of the page nearest
-their initial cite.  To ensure this proper ``floating'' placement
-of figures, use the environment
-\textbf{figure} to enclose the figure and its caption.
-
-This sample document contains examples of \textbf{.eps}
-and \textbf{.ps} files to be displayable with \LaTeX.  More
-details on each of these is found in the \textit{Author's Guide}.
-
-\begin{figure}
-\centering
-\epsfig{file=fly.eps}
-\caption{A sample black and white graphic (.eps format).}
-\end{figure}
-
-\begin{figure}
-\centering
-\epsfig{file=fly.eps, height=1in, width=1in}
-\caption{A sample black and white graphic (.eps format)
-that has been resized with the \texttt{epsfig} command.}
-\end{figure}
-
-
-As was the case with tables, you may want a figure
-that spans two columns.  To do this, and still to
-ensure proper ``floating'' placement of tables, use the environment
-
-\subsection{Theorem-like Constructs}
-Other common constructs that may occur in your article are
-the forms for logical constructs like theorems, axioms,
-corollaries and proofs.  There are
-two forms, one produced by the
-command \texttt{{\char'134}newtheorem} and the
-other by the command \texttt{{\char'134}newdef}; perhaps
-the clearest and easiest way to distinguish them is
-to compare the two in the output of this sample document:
-
-This uses the \textbf{theorem} environment, created by
-the\linebreak\texttt{{\char'134}newtheorem} command:
-\newtheorem{theorem}{Theorem}
-\begin{theorem}
-Let $f$ be continuous on $[a,b]$.  If $G$ is
-an antiderivative for $f$ on $[a,b]$, then
-\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
-\end{theorem}
-
-The other uses the \textbf{definition} environment, created
-by the \texttt{{\char'134}newdef} command:
-\newdef{definition}{Definition}
-\begin{definition}
-If $z$ is irrational, then by $e^z$ we mean the
-unique number which has
-logarithm $z$: \begin{displaymath}{\log e^z = z}\end{displaymath}
-\end{definition}
-
-Two lists of constructs that use one of these
-forms is given in the
-\textit{Author's  Guidelines}.
-
-There is one other similar construct environment, which is
-already set up
-for you; i.e. you must \textit{not} use
-a \texttt{{\char'134}newdef} command to
-create it: the \textbf{proof} environment.  Here
-is a example of its use:
-\begin{proof}
-Suppose on the contrary there exists a real number $L$ such that
-\begin{displaymath}
-\lim_{x\rightarrow\infty} \frac{f(x)}{g(x)} = L.
-\end{displaymath}
-Then
-\begin{displaymath}
-l=\lim_{x\rightarrow c} f(x)
-= \lim_{x\rightarrow c}
-\left[ g{x} \cdot \frac{f(x)}{g(x)} \right ]
-= \lim_{x\rightarrow c} g(x) \cdot \lim_{x\rightarrow c}
-\frac{f(x)}{g(x)} = 0\cdot L = 0,
-\end{displaymath}
-which contradicts our assumption that $l\neq 0$.
-\end{proof}
-
-\subsection*{A {\secit Caveat} for the \TeX\ Expert}
-
 
 \section{Conclusions}
 I concluded stuff
@@ -463,24 +427,10 @@ document in Appendix-appropriate form:
 \subsubsection*{A Caveat for the \TeX\ Expert}
 \subsection{Conclusions}
 \subsection{Acknowledgments}
-\subsection{Additional Authors}
-This section is inserted by \LaTeX; you do not insert it.
-You just add the names and information in the
-\texttt{{\char'134}additionalauthors} command at the start
-of the document.
 \subsection{References}
 Generated by bibtex from your ~.bib file.  Run latex,
 then bibtex, then latex twice (to resolve references)
 to create the ~.bbl file.  Insert that ~.bbl file into
 the .tex source file and comment out
 the command \texttt{{\char'134}thebibliography}.
-% This next section command marks the start of
-% Appendix B, and does not continue the present hierarchy
-\section{More Help for the Hardy}
-The sig-alternate.cls file itself is chock-full of succinct
-and helpful comments.  If you consider yourself a moderately
-experienced to expert user of \LaTeX, you may find reading
-it useful but please remember not to change it.
-%\balancecolumns % GM June 2007
-% That's all folks!
 \end{document}

@@ -136,18 +136,14 @@ class Sudoku:
                     return False
 
         #Ensure that every 3rd is fully filled in without duplicates
-        bracketx = self.size/3
-        brackety = self.size/3
 
-        outerLayer = 3
-
-        for xoff in range(outerLayer):
-            for yoff in range(outerLayer):
+        for xoff in range(self.innerSize):
+            for yoff in range(self.innerSize):
                 valid = set()
-                for i in range(bracketx):
-                    for j in range(brackety):
-                        indexx = xoff*bracketx+i
-                        indexy = yoff*brackety+j
+                for i in range(self.innerSize):
+                    for j in range(self.innerSize):
+                        indexx = xoff*self.innerSize+i
+                        indexy = yoff*self.innerSize+j
 
                         if matrix[indexx][indexy] > 0:
                             if matrix[indexx][indexy] in valid:
@@ -170,5 +166,5 @@ class Sudoku:
 
     #Print the sudoko matrix
     def show(self, matrix):
-        for i in range(self.size):
+        for i in range(len(matrix)):
             print(matrix[i])
