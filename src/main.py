@@ -38,10 +38,10 @@ def main(argc, argv):
     question = getMatrixFromFile(argv[1])
 
     #Create the solver to solve sudoku
-    solver = bt.Sudoku(len(question))
+    solver = bt.Sudoku()
 
     #The answer that the solver has calculated
-    answer = solver.solve(question)
+    answer = solver.solve(question, int(len(question)))
 
     #If none then there was not a possible solution
     if answer == None:

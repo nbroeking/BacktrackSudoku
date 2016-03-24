@@ -11,16 +11,11 @@ import math
 
 class Sudoku:
 
-    #Init all the variables to their default values
-    def __init__(self, size):
-        self.size = size 
-        self.maxIndex = size * size
+    def solve(self, matrix, origSize):
+        self.innerSize = int(math.sqrt(origSize))
+        self.size = origSize
+        self.maxIndex = self.size * self.size
 
-        if size %3 != 0:
-            raise ValueError("Sudoku must be in sets of 3")
-   
-    #Main entry point takes a matrix and will solve it for a correct sudoku
-    def solve(self, matrix):
         return self.solveRec(matrix, 0)
  
     #Recusivly solves the sudoku puzzle
@@ -73,6 +68,7 @@ class Sudoku:
     #Reject checks to see if any states are invalid
     #If they are then we want to imidiatly return true
     #If there is nothing wrong with the state we return false
+    #Matching the form of n^2 * n^2
     def reject(self, matrix):
         
         #Check that for each row there are no duplicate values
@@ -96,20 +92,16 @@ class Sudoku:
                     y.add(matrix[i][j])
 
         #Each 3rd of the grid should not have any duplicate values
-        bracketx = self.size/3
-        brackety = self.size/3
-
-        outerLayer = 3
-
-        for xoff in range(outerLayer):
-            for yoff in range(outerLayer):
+        #Check the n^2 x n^2
+        for xoff in range(self.innerSize):
+            for yoff in range(self.innerSize):
                 valid = set()
                 #print("Square set ", valid, "for", xoff, yoff)
-                for i in range(bracketx):
-                    for j in range(bracketx):
+                for i in range(self.innerSize):
+                    for j in range(self.innerSize):
 
-                        indexx = xoff*bracketx+i
-                        indexy = yoff*brackety+j
+                        indexx = xoff*self.innerSize+i
+                        indexy = yoff*self.innerSize+j
 
                         if matrix[indexx][indexy] > 0:
                             if matrix[indexx][indexy] in valid:
