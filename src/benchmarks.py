@@ -45,7 +45,7 @@ def main(argc, argv):
     points = set()
 
     
-    for fakei in range(1, 9):
+    for fakei in range(1, 6):
         i = fakei*fakei
 
         solver = bt.Sudoku()
