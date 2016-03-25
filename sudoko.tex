@@ -48,6 +48,8 @@
 \documentclass{sig-alternate}
   \pdfpagewidth=8.5truein
   \pdfpageheight=11truein
+  
+
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{graphicx}
@@ -60,10 +62,7 @@
 \crdata{978-1-4503-3196-01/2016/01}  % Allows default copyright data (X-XXXXX-XX-X/XX/XX) to be over-ridden.
 % --- End of Author Metadata ---
 
-\title{Backtracking Sudoku Solver
-\titlenote{(Produces the permission block, and
-copyright information). For use with
-SIG-ALTERNATE.CLS. Supported by ACM.}}
+\title{Backtracking Sudoku Solver}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -156,27 +155,28 @@ As long as the coloring follows the rules of the game above.
 
 %---------------------------------------------------
 \subsection{Algorithm}
-The algorithm looks like such where G is the game matrix the box is the current node to color. The box number corisponds to the frame starting at the top left, box 0 and going to the bottom right box $n^2 - 1$ numbered horizontally.
+The algorithm looks like such where G is the game matrix the box is the current node to color. The box number corresponds to the frame starting at the top left, box 0 and going to the bottom right box $n^2 - 1$ numbered horizontally.
+
 \begin{algorithm}
 \caption{Sudoku Backtracking}\label{solve}
-\begin{aglorithmic}[1]
-\Procedure{solve}{G}{box}
+\begin{algorithmic}[1]
+\Procedure{solve}{G, box}
 
-\If regect(G)
+\If{reject (G)}
 \State return None
 \EndIf
 
-\If accept(G)
+\If{accept(G)}
 \State return G
 \EndIf
 
 \If $box \ge n^4$
 \State return None
-\Endif
+\EndIf
 
 \State x, y = getIndecies(box, size)
 
-\If !self.isempty(G[x][y])
+\If{ !self.isempty(G[x][y])}
 \State return solve(G, box+1)
 \EndIf
 
@@ -185,7 +185,7 @@ The algorithm looks like such where G is the game matrix the box is the current 
 \For{ index $i < n^2$}
 \State $G'$[x][y] = i
 \State solution = solve($G'$, box + 1)
-\If result !=None:
+\If{result !=None}
 \State return Result
 \EndIf
 \EndFor
@@ -199,63 +199,62 @@ TODO:CITATION
 The above algorithm is dependent on the following sub routines
 
 %Reject sub routine
+\subsubsection{reject}
 The reject subroutine takes a Graph G and then checks to see if there is there is
 a possible solution given the State. For example if the graph passed to it has two threes in a single column then reject will return True saying that there is no solution because you can't have more than one of each number in any given column. 
 
-This subroutine is extremly powerful becuase it allows us to prune the tree for huge subtrees at a time. Given any two squares of the same value there are potentially $9^(n^4 - 2)$ sub states that can we don't need to search because we know they can't be valid. 
+This subroutine is extremely powerful because it allows us to prune the tree for huge sub-trees at a time. Given any two squares of the same value there are potentially $9^(n^4 - 2)$ sub states that can we don't need to search because we know they can't be valid. 
 
 The reject subroutine does stuff and looks like.
-\subsubsection{reject}
+
 \begin{algorithm}
 \caption{Reject}\label{reject}
 \begin{algorithmic}[1]
-\Procedure{reject}
-
+\Procedure{reject}{G}
 \For{ index $i < n^2$}
 \State $x = set()$
 \For{ index $j < n^2$}
-\If matrix[i][j] > 0
-\If matrix[i][j] in x
+\If{matrix[i][j] > 0}
+\If{matrix[i][j] in x}
 \State return True
 \EndIf
 \State x.add(matrix[i][j])
 \EndIf
 \EndFor
-
+\EndFor
 \For{ index $j < n^2$}
 \State $y = set()$
 \For{ index $i < n^2$}
-\If matrix[i][j] > 0
-\If matrix[i][j] in y
+\If{ matrix[i][j] > 0}
+\If{ matrix[i][j] in y}
 \State return True
 \EndIf
 \State y.add(matrix[i][j])
 \EndIf
 \EndFor
-
+\EndFor
 \For{ index $offsetx < n^2$}
 \For{ index $offsety < n^2$}
 \State valid = set()
-    \For{ index $i < n^2$}
-    \For{ index $j < n^2$}
-    \State indexX = offsetx*n + i
-    \State indexY = offsetY*n + j
-
-    \If $matrix[indexX][indexY] > 0$
-    \If matrix[indexx][indexy] in valid 
-    \State return True
-    \EndIf
-    \State valid.add(matrix[indexX][indexY]
-    \EndIf
-    
-    \EndFor
-    \EndFor
+\For{ index $i < n^2$}
+\For{ index $j < n^2$}
+\State indexX = offsetx*n + i
+\State indexY = offsetY*n + j
+\If $matrix[indexX][indexY] > 0$
+\If matrix[indexx][indexy] in valid 
+\State return True
+\EndIf
+\State valid.add(matrix[indexX][indexY]
+\EndIf
+\EndFor
+\EndFor
 \EndFor
 \EndFor
 \State return False
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
 TODO:CITATION
 
 %Accept sub routine
@@ -265,7 +264,7 @@ The accept subroutine looks very similar to reject but instead of determining if
 \begin{algorithm}
 \caption{Accept}\label{accept}
 \begin{algorithmic}[1]
-\Procedure{accept}
+\Procedure{accept}{G}
 
 \For{ index $i < n^2$}
 \State $x = set()$
@@ -278,6 +277,7 @@ The accept subroutine looks very similar to reject but instead of determining if
 \Else
 \State return False
 \EndIf
+\EndFor
 \EndFor
 
 \For{ index $j < n^2$}
@@ -292,26 +292,27 @@ The accept subroutine looks very similar to reject but instead of determining if
 \State return False
 \EndIf
 \EndFor
+\EndFor
 
 \For{ index $offsetx < n^2$}
 \For{ index $offsety < n^2$}
 \State valid = set()
-    \For{ index $i < n^2$}
-    \For{ index $j < n^2$}
-    \State indexX = offsetx*n + i
-    \State indexY = offsetY*n + j
+\For{ index $i < n^2$}
+\For{ index $j < n^2$}
+\State indexX = offsetx*n + i
+\State indexY = offsetY*n + j
 
-    \If $matrix[indexX][indexY] > 0$
-    \If matrix[indexx][indexy] in valid 
-    \State return False
-    \EndIf
-    \State valid.add(matrix[indexX][indexY]
-    \Else
-    \State return False
-    \EndIf
+\If $matrix[indexX][indexY] > 0$
+\If matrix[indexx][indexy] in valid 
+\State return False
+\EndIf
+\State valid.add(matrix[indexX][indexY]
+\Else
+\State return False
+\EndIf
     
-    \EndFor
-    \EndFor
+\EndFor
+\EndFor
 \EndFor
 \EndFor
 \State return True
@@ -325,11 +326,14 @@ Get Indecies is a small subroutine that allows us to do a conversion between fra
 recursion from the box number then gaurentees that we have a max recustion depth of $n^4$ where the box matches the recurstion depth. 
 
 getIndecies takes a integer i and n and returns a tuple of the x and y indecies that corrispond to that frame.
+
 \begin{algorithm}
 \caption{getIndecies}\label{getIndecies}
 \begin{algorithmic}[1]
-\Procedure{getIndecies}
-\State return ( index / n^2, index % n^2)
+\Procedure{getIndecies}{index}
+
+\State return ( $index / n^2$, $index \% n^2$)
+
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -341,11 +345,14 @@ The is empty subroutine is used to check to see if any particular value in the m
 For the purposes of the algorithm we use 0 to represent empty and any value x where $0 < x \le n^2$ to be the value.
 
 Is empty takes a value, val that is taken from the matrix
+\subsubsection{reject}
+
 \begin{algorithm}
-\caption{isEmpty}\label{isEmpty}
+\caption{isempty}\label{isempty}
 \begin{algorithmic}[1]
-\Procedure{isEmpty}
-\State return True ? val <= 0 : False
+\Procedure{isempty}{val}
+
+\State return $True ? val <= 0 : False$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -357,10 +364,12 @@ The final subroutine is deep copy. A deep copy is used because by making a copy 
 to keep a stack off the states we are looking for and instead are able to take advantage of the recursion stack.
 
 The deep copy subroutine takes a list of list as the Matrix G to make a copy of. 
+
 \begin{algorithm}
-\caption{deepCopy}\label{deepCopy}
+\caption{deepcopy}\label{deepcopy}
 \begin{algorithmic}[1]
-\Procedure{deepCopy}
+\Procedure{deepcopy}{G}
+
 \State G' = list()
 \For{ list l in G}
 \State listCopy = list()
@@ -451,37 +460,4 @@ and the \textbf{.cls} and \textbf{.tex} files that it describes.
 %
 %APPENDICES are optional
 %\balancecolumns
-\appendix
-%Appendix A
-\section{Headings in Appendices}
-The rules about hierarchical headings discussed above for
-the body of the article are different in the appendices.
-In the \textbf{appendix} environment, the command
-\textbf{section} is used to
-indicate the start of each Appendix, with alphabetic order
-designation (i.e. the first is A, the second B, etc.) and
-a title (if you include one).  So, if you need
-hierarchical structure
-\textit{within} an Appendix, start with \textbf{subsection} as the
-highest level. Here is an outline of the body of this
-document in Appendix-appropriate form:
-\subsection{Introduction}
-\subsection{The Body of the Paper}
-\subsubsection{Type Changes and  Special Characters}
-\subsubsection{Math Equations}
-\paragraph{Inline (In-text) Equations}
-\paragraph{Display Equations}
-\subsubsection{Citations}
-\subsubsection{Tables}
-\subsubsection{Figures}
-\subsubsection{Theorem-like Constructs}
-\subsubsection*{A Caveat for the \TeX\ Expert}
-\subsection{Conclusions}
-\subsection{Acknowledgments}
-\subsection{References}
-Generated by bibtex from your ~.bib file.  Run latex,
-then bibtex, then latex twice (to resolve references)
-to create the ~.bbl file.  Insert that ~.bbl file into
-the .tex source file and comment out
-the command \texttt{{\char'134}thebibliography}.
 \end{document}
