@@ -11,13 +11,14 @@ failed=0
 function run_test {
     i=$1
     #in_file=$(echo $i | sed 's/txt$/in/g')
-    solution=$(echo $i | sed 's/txt$/sol/g')
-   
+    #solution=$(echo $i | sed 's/txt$/txt/g')
+ 
     in_file=$i
+  
+    solution=$(basename $i)
 
     real=$solution
 
-    #echo $in_file
     #echo -n "${nc}"
         
     #echo -n "$green|$nc ${cyan}$(printf '%-50s' $i) ["
@@ -29,9 +30,10 @@ function run_test {
 
     python ./main.py $in_file > /tmp/sudoku.test
      
+    fullSol="./solutions/"$solution
     
     #echo -n "$green|$nc ${cyan}$(printf '%-50s' $i) ["
-    diff /tmp/sudoku.test  $solution > /dev/null 2>&1
+    diff /tmp/sudoku.test  $fullSol > /dev/null 2>&1
     
     if [ $? -eq 0 ] ; then
         printf "$green| Test: $in_file Passed$nc\n"
