@@ -31,7 +31,8 @@ function run_test {
     python ./main.py $in_file > /tmp/sudoku.test
      
     fullSol="./solutions/"$solution
-    
+   
+    #echo "fullSol = $fullSol" 
     #echo -n "$green|$nc ${cyan}$(printf '%-50s' $i) ["
     diff /tmp/sudoku.test  $fullSol > /dev/null 2>&1
     
@@ -46,7 +47,7 @@ function run_test {
 
         failed=$(($failed + 1))
         printf "${nc} + Expected:\n"
-        cat $solution
+        cat $fullSol
         echo " + Got:"
         cat "/tmp/sudoku.test"
         printf "\n$red ************************$nc\n\n"
