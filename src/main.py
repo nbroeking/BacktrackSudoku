@@ -38,7 +38,7 @@ def main(argc, argv):
     question = getMatrixFromFile(argv[1])
 
     #Create the solver to solve sudoku
-    solver = bt.Sudoku()
+    solver = bt.Sudoku(False, 0)
 
     #The answer that the solver has calculated
     answer = solver.solve(question, int(len(question)))
