@@ -27,45 +27,26 @@ class Sudoku:
     def solveRec(self, matrix, box):
   
         #self.percentage(matrix)
-         
-        if self.debug and self.inputlen != 0 and box > self.inputlen:
-            print "Continue?"
-            sys.stdin.readline()
-
-        if self.debug:
-            print "Trying to reject"
         
+        #The index of the box that we are now iterating values of
+        x, y = self.getIndex(box)
+ 
         #If the matrix contains an invalid square then we reject the node
         #This prunes all sub states if we find an invalid state
         if( self.reject(matrix)):
             return None
 
-        if self.debug:
-            print "Trying to accept"
-
         #If we found a solution then we should imidiatly return it and check nothing more
         if( self.accept(matrix)):
             return matrix
    
-        if self.debug:
-            print "checking boxes"
-
         #if we ran out of boxes then we didnt find a solution 
         if( box >= self.maxIndex):
             return None
 
-        if self.debug:
-            print "get index"
-
-        #The index of the box that we are now iterating values of
-        x, y = self.getIndex(box)
-
-        
-        
         #If we found a box that already has a value then it is a fixed value and we need to ignore it
         if self.isempty(matrix[x][y]) == False:
-            #print("Skipping " + str(box))
-            
+            #print("Skipping " + str(box)) 
             return self.solveRec(matrix, box+1)
 
         #We found a new valid state now we need to check all child states recursivly
@@ -74,28 +55,22 @@ class Sudoku:
         #without this step every iteration we loose the previous states because python just loves 
         #pointers so much
 
-        if self.debug:
-            print "Attempting to deepcopy"
-        node = copy.deepcopy(matrix) 
-        #node = matrix
-        if self.debug:
-            print "attempting to loop"
+        #node = copy.deepcopy(matrix) 
+        node = matrix
         
         #We will do a depth first search for every state for box values 1-9
         #Once all child nodes fail for value 1 we try all child values for 2
         for i in range(1, self.size +1):
             node[x][y] = i
  
-            if self.debug:
-                print "In box " + str(box) + " trying val " + str(i)
-                self.show(node)
-            
             #Depth first search
             result = self.solveRec(node, box+1)
     
             #if we found a result then we want to return it
             if result != None:
                 return result
+
+        node[x][y] = 0
         #but we probably didnt so if we get none then we want to backtrack and try other states
         return None
             

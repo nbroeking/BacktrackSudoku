@@ -10,16 +10,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import sudoku.backtrack as bt
-
-#Generate an empty matrix
-def generate(size):
-    res = []
-    for i in range(size):
-        inter = []
-        for j in range(size):
-            inter.append(0)
-        res.append(inter)
-    return res
+import sudoku.generator as gen
 
 #Read the matrix from the input file
 def getMatrixFromFile(file):
@@ -43,36 +34,41 @@ def main(argc, argv):
 
     fig = plt.figure()
     points = set()
-
-    
+ 
     for fakei in range(1, 5):
+        print "Running sim for size " + str(fakei)
         i = fakei*fakei
 
-        solver = bt.Sudoku()
-        #question = [[0]*i] * i
+        for hints in range(0, 15):
+            print "\t hints = " + str(hints)
+            success = 0
+            
+            total = 20
+            if fakei > 4:
+                total = 1
 
-        question = generate(i)
-
-        print("Question?", i)
-        solver.show(question)
-
-        time1 = time.time()
-        answer = solver.solve(question, i)
-        time2 = time.time()
-
-        calcTime = time2 - time1
-       
-        calcTime += calcTime*1000 
-        print("Answer")
-        
-        if answer == None:
-            print("There is no solution")
-        else:
-            solver.show(answer)
-
-        print("Solved in " + str(calcTime) +"ms")
-        print("\n")
-        points.add((i, calcTime))
+            while success < total: 
+                print "\t\tN = " + str(i) + " hints = " + str(hints) + " Success: " + str(success)+"/"+str(total)
+                solver = bt.Sudoku()
+                
+                question = gen.generate(i, hints)
+                
+                #print("Question?", i)
+                #solver.show(question)
+                
+                time1 = time.time()
+                answer = solver.solve(question, i)
+                time2 = time.time()
+                
+                calcTime = time2 - time1
+                
+                calcTime += calcTime*1000 
+                #print("Answer")
+                
+                if answer != None:
+                    #solver.show(answer)
+                    success += 1
+                    points.add((fakei, calcTime))
 
         
     x,y = zip(*points)

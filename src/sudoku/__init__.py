@@ -1,1 +1,1 @@
-__all__ = ["backtrack"]
+__all__ = ["backtrack", "generate"]
