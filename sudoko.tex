@@ -563,7 +563,7 @@ What this shows is that at each step of the tree we do $O(n^4)$ work. So now we 
 We can see this exponential behavior in the following graph. I ran the sudoku solver for n up to 4. Each n was given up to 5 hints and then timed to see how long it took. 30 trials were run for each n. 
 
 %includegraphics[width=\linewidth, height=200px, width=175px]{q6.png}\\
-\includegraphics[]{allN.jpg}
+\includegraphics[]{src/allN.jpg}
 
 \subsubsection{Application}
 The proof above, for showing a runtime of $O(n^{2*n^4 + 2})$ is fairly straight forward but a runtime that is that exponential is horrible. To put in in perspective if it took 1 ms to calculate a sudoku for n = 1 then it would take 4 minutes to calculate a sudoku for n = 2, $2*10^70$ days to calculate a standard sudoku. Even though it does take a very long time for standard Sudoku it doesn't quite take this long. The reason is because even though the game tree is really really large, $n^{2*n^4}$ thanks to the reject subroutine we never need to search anywhere close to all of it. If we look at an empty sudoku game with no hints then at every box we have a very different branching factor that looks like:
