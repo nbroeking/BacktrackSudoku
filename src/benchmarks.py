@@ -39,13 +39,13 @@ def main(argc, argv):
         print "Running sim for size " + str(fakei)
         i = fakei*fakei
 
-        for hints in range(0, 3):
+        for hints in range(0, 4):
             print "\t hints = " + str(hints)
             success = 1
             
             total = 30
             if fakei >= 4:
-                total = 2
+                total = 3
 
             while success <= total: 
                 print "\t\tN = " + str(i) + " hints = " + str(hints) + " Success: " + str(success)+"/"+str(total)
@@ -72,14 +72,14 @@ def main(argc, argv):
                         points.add((fakei, calcTime))
                 except ValueError as err:
                     print "Skipping: "
-                        points.add((fakei, 3600000))
+                    points.add((fakei, 3600000))
        
     print "Completed Procesing"
  
     rate = list()
 
     for i in range(1, 5):
-        rate.append((i, ((i)**2)**(i)))
+        rate.append((i, ((i)**i)**(2)))
 
     x1,y1 = zip(*rate)
     x,y = zip(*points)
