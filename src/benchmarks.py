@@ -39,15 +39,15 @@ def main(argc, argv):
         print "Running sim for size " + str(fakei)
         i = fakei*fakei
 
-        for hints in range(0, 15):
+        for hints in range(0, 3):
             print "\t hints = " + str(hints)
-            success = 0
+            success = 1
             
-            total = 20
-            if fakei > 4:
-                total = 1
+            total = 30
+            if fakei >= 4:
+                total = 2
 
-            while success < total: 
+            while success <= total: 
                 print "\t\tN = " + str(i) + " hints = " + str(hints) + " Success: " + str(success)+"/"+str(total)
                 solver = bt.Sudoku()
                 
@@ -57,28 +57,41 @@ def main(argc, argv):
                 #solver.show(question)
                 
                 time1 = time.time()
-                answer = solver.solve(question, i)
-                time2 = time.time()
+                try:
+                    answer = solver.solve(question, i)
+                    time2 = time.time()
                 
-                calcTime = time2 - time1
+                    calcTime = time2 - time1
                 
-                calcTime += calcTime*1000 
+                    calcTime += calcTime*1000 
                 #print("Answer")
                 
-                if answer != None:
-                    #solver.show(answer)
-                    success += 1
-                    points.add((fakei, calcTime))
+                    if answer != None:
+                        #solver.show(answer)
+                        success += 1
+                        points.add((fakei, calcTime))
+                except ValueError as err:
+                    print "Skipping: "
+                        points.add((fakei, 3600000))
+       
+    print "Completed Procesing"
+ 
+    rate = list()
 
-        
+    for i in range(1, 5):
+        rate.append((i, ((i)**2)**(i)))
+
+    x1,y1 = zip(*rate)
     x,y = zip(*points)
     plt.scatter(x,y)
+    plt.plot(x1, y1)
     plt.xlabel("Size of matrix")
     plt.ylabel("Time to solve (ms)")
-    plt.suptitle("Time to solve matrix - No constraints")
+    plt.suptitle("Time to solve matrix")
 
-    fig.savefig("noconstraints.jpg")
+    fig.savefig("allN.jpg")
 
+    
     plt.show()
 
 #If the main module call main

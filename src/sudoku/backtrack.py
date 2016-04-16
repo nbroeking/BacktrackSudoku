@@ -4,7 +4,9 @@
 # Description: This file contains the class that is used to solve sudoku
 #   solve is the main entry point.
 
+import select
 import copy
+import time
 import numpy as np
 import sys
 import math
@@ -14,18 +16,30 @@ class Sudoku:
     def __init__(self, debug = False, inputlen = 0):
         self.debug = debug
         self.inputlen = inputlen
+       
 
     def solve(self, matrix, origSize):
         self.innerSize = int(math.sqrt(origSize))
         self.size = origSize
         self.found = 0
         self.maxIndex = self.size * self.size
+        self.startTime = time.time()
 
         return self.solveRec(matrix, 0)
  
     #Recusivly solves the sudoku puzzle
     def solveRec(self, matrix, box):
-  
+ 
+        if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
+            text =  sys.stdin.readline()
+            if text == "q\n":
+                raise ValueError("Takes to long")
+            print "Box level = " + str(box)
+            self.show(matrix)
+           
+        if time.time() - self.startTime > 900000:
+            return matrix #We just cant spend anymore time solving this crap
+            
         #self.percentage(matrix)
         
         #The index of the box that we are now iterating values of
