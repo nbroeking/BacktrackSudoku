@@ -78,14 +78,9 @@ def main(argc, argv):
  
     rate = list()
 
-    for i in range(1, 5):
-        rate.append((i, ((i)**i)**(2)))
-
-    x1,y1 = zip(*rate)
     x,y = zip(*points)
     plt.scatter(x,y)
-    plt.plot(x1, y1)
-    plt.xlabel("Size of matrix")
+    plt.xlabel("Size of Matrix = N")
     plt.ylabel("Time to solve (ms)")
     plt.suptitle("Time to solve matrix")
 
