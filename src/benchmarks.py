@@ -63,7 +63,7 @@ def main(argc, argv):
                 
                     calcTime = time2 - time1
                 
-                    calcTime += calcTime*1000 
+                    calcTime = calcTime*1000 
                 #print("Answer")
                 
                     if answer != None:

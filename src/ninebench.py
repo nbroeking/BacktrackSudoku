@@ -34,7 +34,7 @@ def main(argc, argv):
 
     fig = plt.figure()
     points = set()
-    fakei = 2
+    fakei = 3
 
     i = fakei*fakei
 
@@ -44,7 +44,7 @@ def main(argc, argv):
     bestPuzzle = []
     bestTime = 900000000
 
-    for hints in range(0, 14):
+    for hints in range(0, 80):
         print "\t hints = " + str(hints)
         success = 1
         
