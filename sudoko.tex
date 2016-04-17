@@ -564,6 +564,8 @@ We can see this exponential behavior in the following graph. I ran the sudoku so
 
 \includegraphics[width=\linewidth]{src/allN.jpg}
 
+We can see the horrible exponential nature of this algorithm. The above data does not even come close to the maximum time taken but we can see the effect that backtracking can have as N grows large. 
+
 \subsubsection{Application}
 The proof above, for showing a runtime of $O(n^{2*n^4 + 2})$ is fairly straight forward but a runtime that is that exponential is horrible. To put in in perspective if it took 1 ms to calculate a sudoku for n = 1 then it would take 4 minutes to calculate a sudoku for n = 2, $2*10^70$ days to calculate a standard sudoku. Even though it does take a very long time for standard Sudoku it doesn't quite take this long. The reason is because even though the game tree is really really large, $n^{2*n^4}$ thanks to the reject subroutine we never need to search anywhere close to all of it. If we look at an empty sudoku game with no hints then at every box we have a very different branching factor that looks like:
 
@@ -619,13 +621,57 @@ Both of these methods as I have mentioned have a constant math conversion and th
 
 \subsubsection{Sudoku Backtracking Algorithm}
 The sudoku Backtracking algorithms space requirements can be defined by looking at when and where it creates memory. Looking at the algorithm 
+
+\begin{algorithm}
+\caption{Sudoku Backtracking}\label{solve}
+\begin{algorithmic}[1]
+\Procedure{solve}{G, box}
+
+\If{reject (G)} -> Uses $n^2$ but removed after
+\State return None
+\EndIf
+
+\If{accept(G)} -> Uses $n^2$ but removed after
+\State return G
+\EndIf
+
+\If $box \ge n^4$  -> O(1)
+\State return None
+\EndIf
+
+\State x, y = getIndecies(box, size) -> O(1)
+
+\If{ !self.isempty(G[x][y])}  -> O(1)
+\State return solve(G, box+1) 
+\EndIf
+
+\For{ index $i < n^2$} -> O(1)
+\State $G'$[x][y] = i
+\State solution = solve($G'$, box + 1)
+\If{result !=None}
+\State return Result
+\EndIf
+\EndFor
+\State G[x][y] = 0
+\State Return None
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+At each step in the graph search we can see that we need $O(n^2)$ space for the accept and reject subroutines. This is not carried down from recursive calls though and thus does not add over time. No space is actually needed to be saved into the recursive calls because all the sudoku backtracking is done in place. Thus we need $O(n^2) + O(n^4)$ showing that the space complexity for the sudoku backtracking algorithm is at most $O(n^4)$
+
+We can take this a step further though to establish that not only is the space $O(n^4)$ but is also $\Theta(n^4)$ We can see that size of space is bounded both upper and lower by the size of $n^4$ we will never do any better that $n^4$ because that is the bare minimum that is required to hold all the information. We also wont do any worse as we showed above thus proving the $\Theta(n^4)$ space complexity. 
+
 \subsection{Space Complexity for Different Hints}
+Its also important to mention that the space complexity, unlike the runtime, does not change depending on the number of hints. All hints are contained inside the game matrix and thus the space Complexity is $\Theta(n^4)$ regardless the number of hints the player is given. 
 
 %---------------------------------------------------
-\subsection{Runtime for constraints}
+\subsection{Space for constraints}
 
 %---------------------------------------------------
 \subsection{Inputs} 
+
+As I have mentioned the runtime with the sudoku solver is extremely variable mainly based off of its good chance of finding a solution early. 
 \subsubsection{Inputs Worst Case}
 \subsubsection{Inputs Average Case}
 \subsubsection{Inputs Best Case}
