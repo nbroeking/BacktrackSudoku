@@ -101,7 +101,7 @@ def main(argc, argv):
     plt.ylabel("Time to solve (ms)")
     plt.suptitle("Time to Solve Matrix for n = 3")
 
-    fig.savefig("four.jpg")
+    fig.savefig("nine.jpg")
 
     
     print "Worst Puzzle took " + str(worstTime) + "s"
