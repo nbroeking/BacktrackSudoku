@@ -116,7 +116,8 @@ Nicolas C. Broeking\\
 
 \maketitle
 \begin{abstract}
-I implemented a backtracking sudoko solver. Not yet actually but I really hope I end up with one. 
+In this project I successful;y implemented a Sudoku Backtracking Solver establishing an algorithm and psydocode. I prove that the runtime in the worst case is $O(n^{2*^{n^4} + 2})$ but by introducing a variable m where m is the number of unfilled squares I am able to show a tighter runtime of $O(n^{2*m})$. Then I am able to show the space complexity of the algorithm to be $O(n^4)$. Finally, I analyze the types of inputs into the algorithm and show the worst, average, and best case inputs for the algorithm. 
+
 \end{abstract}
 
 % A category with the (minimum) three required fields
@@ -372,10 +373,10 @@ Is empty takes a value, val that is taken from the matrix
 
 
 %---------------------------------------------------
-\subsection{Correctness}
+\section{Correctness}
 The Sudoku Backtracking Algorithm can be proven correct by looking at each part piece by piece.
 
-\subsubsection{Sudoku Backtracking Solver}
+\subsection{Sudoku Backtracking Solver}
 The first piece is the actual sudoku solver. The solver is correct if and only if it returns a valid solution if one exists or None if a valid solution does not exist. A Sudoku puzzle is said to have a solution if each of the following rules are satisfied. 
 \begin{itemize}
 \item{$\forall val \in Grid \quad 0 < val < n^2$} 
@@ -399,7 +400,7 @@ The only other thing we havn't shown is how to handle the hints that are fed int
 Ensuring that for any given graph G and recursion depth n we can find a solution then we know that for any G and recurstion depth we are able to find a solution proving that Sudoku Backtracking solver returns a valid solution if one exists or None if a valid solution does not exist.
 \end{proof}
 
-\subsubsection{Reject}
+\subsection{Reject}
 If we have a $n^2$ x $n^2$ matrix. Then we have 3 sets: Rows, Cols, and Squares. Rows is the set of $n^2$ rows. Cols is the set of $n^2$ cols and squares contains $n^2$ non overlapping squares of size n x n. We need to reject the matrix if one of three conditions is true. 
 \begin{itemize}
 \item{$\forall row \in Rows$ row has $n^2$ unique non zero values}
@@ -422,7 +423,7 @@ Finally, we can assume we have a matrix that has does not violate any of the rul
 Proving that the reject function will return true if any of Sudoku rules are violated and false if not. 
 \end{proof}
 
-\subsubsection{Accept}
+\subsection{Accept}
 Accept is extremely similar to reject but instead of checking if there is a chance of finding a correct solution we must ensure that the full grid is filled in. Given this information we know that we can accept a grid the following four rules are true. 
 
 \begin{itemize}
@@ -445,7 +446,7 @@ In all steps if we see any non 0 value we short circuit.
 Ensuring that each of these 4 rules is satisfied the last step is to return true proving that Accept will return true if G is a valid solution else it will return false. 
 \end{proof}
 
-\subsubsection{Get Indecies}
+\subsection{Get Indecies}
 The get indecies function is designed to convert any integer $0 \le i \le n^4$ to the corresponding tuple that represents indecies into the Sudoku grid.
 
 \textbf{Get Indecies returns a tuple (x,y) where x is the row index and y is the column index}
@@ -453,20 +454,22 @@ The get indecies function is designed to convert any integer $0 \le i \le n^4$ t
 If we have an matrix M where M is size $n^2 x n^2$ then index i is equal to the $i/n^2$ row and the $i\%n^2$ column. Formally we can write this as Given an integer i where $0 \le i \le n^4$ getIndicies(i) will return ($i/n^2$, $i\%n^2$). The subroutine returns this mathematical expression exactly proving that Get Indecies returns a tuple (x,y) where x is the row index and y is the column index.
 \end{proof}
 
-\subsubsection{Is Empty}
+\subsection{Is Empty}
 \textbf{Is Empty returns true if Value at x,y in G = 0 else false}
 \begin{proof}
 Assume we have a G where there is not an empty val at x,y then checking if the value is 0 ensures that we correctly check if the value is empty or not. 
 \end{proof}
 
-\subsubsection{Total}
+\subsection{Total}
 Tying all the pieces together we prove that the algorithm correctly solves Sudoku by backtracking anytime there is a conflict. 
 
 %---------------------------------------------------
-\subsection{Runtime Complexity for size N}
+\section{Runtime Complexity}
+
+\subsection{For size N }
 The Sudoku Backtracking Algorithm is a very simple algorithm that has a very interesting runtime analysis. First lets look at each of the subroutines individually. 
 
-\subsubsection{Reject}
+\subsection{Reject}
 
 \textbf{Reject: Runtime is $n^4$}
 \begin{proof}
@@ -490,7 +493,7 @@ The final step in the reject subroutine is to loop through each square and repea
 Tying this together we take each of these steps in sequence proving the reject subroutine has a runtime of $O(3n^4)$ or $O(n^4)$.
 \end{proof}
 
-\subsubsection{Accept}
+\subsection{Accept}
 
 \textbf{Accept: Runtime is $n^4$}
 \begin{proof}
@@ -505,19 +508,19 @@ The accept subroutine is exactly like the reject subroutine. It has three sub pi
 Thus because the iterations are structured exactly like the reject runtime we can prove that accept is also $O(3n^4)$ or $O(n^4)$.
 \end{proof}
 
-\subsubsection{Get Indecies}
+\subsection{Get Indecies}
 \textbf{Get Indecies has a constant runtime}
 \begin{proof}
 Get indecies is a simple routine but to be thorough we will talk about its runtime. The subroutine just performs a simple conversion from a single integer to a tuple. This math is constant because it has no dependence on the size of n. Thus proving a constant runtime. 
 \end{proof}
 
-\subsubsection{isEmpty}
+\subsection{isEmpty}
 \textbf{isEmpty is a constant runtime}
 \begin{proof}
 Just like the get indecies isEmpty is a simple subroutine but for completeness I will mention it. Because is empty just checks if a value is equal to 0 we are guaranteed that the subroutine is constant time. 
 \end{proof}
 
-\subsubsection{Sudoku Backtracking Algorithm}
+\subsection{Sudoku Backtracking Algorithm}
 Now that we have looked at each of the pieces lets look at the over all algorithm. In the absolute worst case I claim that the Sudoku Backtracking Algorithm has a runtime of $O(n^{2*n^4 + 2})$
 
 Looking at each of the lines of the algorithm we see that:
@@ -602,11 +605,14 @@ The same type of square can be shown for the $n = 3$ situation.
 
 As we can see the branching factor is way better than the worst case proved above but it can not be generalized because the branching factor also depends on how many hints were given. We can introduce a new variable m where m is the number of values that still need to be found. In the worst case we are given an empty board then $ m  n^4$. We can then turn the runtime into $n^{2m}$. 
 
-For every hint that we are given then it dramatically shrinks the number of states by an order of magnitude. How exactly does this look then. Assuming a n = 3. We can run the same kind of test as we ran above where we give the solver different numbers of hints and we see how long it takes to solve. 
+For every hint that we are given then it dramatically shrinks the number of states by an order of magnitude. How exactly does this look then. Well we can look at two different types of sudokus reasonably well.
+The first chart shows how long it takes to run a sudoku assuming a n = 2. We can run the same kind of test as we ran above where we give the solver different numbers of hints and we see how long it takes to solve. 
 
-We end up with a graph that looks like. 
+\includegraphics[width=\linewidth]{src/four.jpg}
 
-%include graphics
+
+
+%n graphics
 
 NOTE: Why do we see the opposite
 
@@ -671,24 +677,47 @@ Its also important to mention that the space complexity, unlike the runtime, doe
 %---------------------------------------------------
 \subsection{Inputs} 
 
-As I have mentioned the runtime with the sudoku solver is extremely variable mainly based off of its good chance of finding a solution early. 
+As I have mentioned the runtime with the sudoku solver is extremely variable mainly based off of its good chance of finding a solution early. That greatly effects then then the types of inputs. We have shown that if we had to search the whole space for a solution then the best input would be to have as many inputs as possible and the worst case would be an empty chart. In practice though this is not what we see. 
+
+The absolute worst case input you could have is the input that does not have a solution but still requires a full tree search to determine that there is no solution. Of course most people would consider this to be cheating because the definition of Sudoku requires there to be only one solution. Of course our algorithm doesn't need this requirement but for the purposes of this next section we will assume there is a solution. 
+
 \subsubsection{Inputs Worst Case}
-\subsubsection{Inputs Average Case}
+Like we just talked about the worst case solution is to not have a solution and to discover this by searching the whole tree. Now because the definition of sudoku we need to look at the situation where there is definitely a solution. The worst case would be when you need to search the whole tree, aka no pruning, and the solution appears on the farther most right side. However, this situation is near impossible to generate because there will always be pruning. 
+	Thus we can define the worst input graph G. Where solving G requires the largest number of backtracks. Why is this the case? Well the more backtracks there are the farther into the tree we need to search. If we keep searching the tree as far as possible and not finding solutions. 
+    
+    We can see that here with this example. This example is the worst case generated for the n =2 example 
+    
+Worst Puzzle took 6.68787956238s
+[0, 0, 0, 0]
+[1, 0, 0, 0]
+[0, 0, 0, 0]
+[3, 0, 0, 1]
+
+
+
 \subsubsection{Inputs Best Case}
 
- 
+The best case puzzle is any puzzle that is fully filled in. Now you might say well obviously so lets take this a step further. The real best case puzzle is any puzzle thats hints prevent him from searching any sub tree that does not contain a solution. This definition is quite round a bout so lets look at an example to show exactly what I mean. The following matrix is the fastes 4x4 matrix that was found. 
+
+Best Puzzle took 0.847816467285s
+[2, 4, 0, 0]
+[0, 0, 0, 0]
+[0, 0, 0, 2]
+[4, 2, 1, 3]
+
+\subsubsection{Inputs Average Case}
+Most of the Sudoku that we try and solve can be considered the average case. Very few Sudoku actually fall into the Worst, or best Case Situations. What makes them average case? Well the thing about the average case Sudoku is that they have only one solution. That means that most of the search tree can be pruned very quickly thus resulting in a very fast solution. Many examples with different numbers of hints can be included. Here are several with their average runtime. 
+
+
 \section{Conclusions}
-I concluded stuff
+In conclusion I have a successfully created a sudoko backtracking implementation. The implementation and given psudocode has a worst case runtime of $O(n^{2*^{n^4} + 2})$. This runtime is shown because the search space of a Sudoku puzzle is $O(n^2*^{n^4} + 2)$. $n^2$ because each tree level has $n^2$ possible branches and raised to the $n^4$ because this is the tree depth. Admitting that this runtime is extremely bad we were able to improve on it by introducing a variable m where m is the number of empty boxes we are able to lower the runtime to $O(n^2*m)$. This is still exponential but unfortunately by the nature of the backtracking algorithm we can not do any better. 
+
+In addition to proving this runtime I successfully proved a space complexity of $O(n^4)$ for the given algorithm. This complexity comes from the fact that the algorithm uses in place calculations and thus never grows its need for space. The algorithm keeps track of a $n^4$ sized matrix and at each level uses a $O(n^2)$ sized set to ensure all the rules are met.  
+
+Finally we were able to analyze the best, average, and worst case inputs and how often they occur. We determined that worst case input is a puzzle that forces the algorithm to have the most backtracked trees. The average case makes up most of the puzzles and allows for one solution that the hints easily map out. Lastly, the best case input is one where the backtracking algorithm correctly guesses the boxes value on the first try preventing the algorithm from having to backgrack subtrees. 
+
 %\end{document}  % This is where a 'short' article might terminate
 
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-This section is optional; it is a location for you
-to acknowledge grants, funding, editing assistance and
-what have you.  In the present case, for example, the
-authors would like to thank Gerald Murray of ACM for
-his help in codifying this \textit{Author's Guide}
-and the \textbf{.cls} and \textbf{.tex} files that it describes.
 
 %
 % The following two commands are all you need in the
