@@ -34,11 +34,17 @@ def main(argc, argv):
 
     fig = plt.figure()
     points = set()
-    fakei = 3
+    fakei = 2
 
     i = fakei*fakei
 
-    for hints in range(0, 20):
+    worstPuzzle = []
+    worstTime = 0
+
+    bestPuzzle = []
+    bestTime = 900000000
+
+    for hints in range(0, 14):
         print "\t hints = " + str(hints)
         success = 1
         
@@ -57,12 +63,24 @@ def main(argc, argv):
             
             time1 = time.time()
             try:
-                answer = solver.solve(question, i)
+                answer = solver.solve(copy.deepcopy(question), i)
                 time2 = time.time()
             
+                #Seconds it took to solve
                 calcTime = time2 - time1
-            
-                calcTime += calcTime*1000 
+           
+                calcTime = calcTime*1000;
+
+                #CalcTime is in ms
+ 
+                if calcTime > worstTime:
+                    worstTime = calcTime
+                    worstPuzzle = question
+
+                if calcTime < bestTime:
+                    bestTime = calcTime
+                    bestPuzzle = question
+
             #print("Answer")
             
                 if answer != None:
@@ -71,7 +89,7 @@ def main(argc, argv):
                     points.add((hints, calcTime))
             except ValueError as err:
                 print "Skipping: "
-                points.add((hints, 3600000))
+                #poiddnts.add((hints, 3600000))
        
     print "Completed Procesing"
  
@@ -83,9 +101,15 @@ def main(argc, argv):
     plt.ylabel("Time to solve (ms)")
     plt.suptitle("Time to Solve Matrix for n = 3")
 
-    fig.savefig("nine.jpg")
+    fig.savefig("four.jpg")
 
     
+    print "Worst Puzzle took " + str(worstTime) + "s"
+    solver.show(worstPuzzle)
+
+    print "Best Puzzle took " + str(bestTime) + "s"
+    solver.show(bestPuzzle)
+
     plt.show()
 
 #If the main module call main
