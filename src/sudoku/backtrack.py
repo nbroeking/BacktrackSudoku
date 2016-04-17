@@ -37,8 +37,8 @@ class Sudoku:
             print "Box level = " + str(box)
             self.show(matrix)
            
-        if time.time() - self.startTime > 900000:
-            return matrix #We just cant spend anymore time solving this crap
+        if time.time() - self.startTime > 1800:
+            raise ValueError("Timeout")
             
         #self.percentage(matrix)
         

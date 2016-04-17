@@ -34,7 +34,7 @@ def main(argc, argv):
 
     fig = plt.figure()
     points = set()
-    fakei = 3
+    fakei = 2
 
     i = fakei*fakei
 
@@ -44,7 +44,7 @@ def main(argc, argv):
     bestPuzzle = []
     bestTime = 900000000
 
-    for hints in range(0, 15):
+    for hints in range(0, i**2):
         print "\t hints = " + str(hints)
         success = 1
         
@@ -101,9 +101,9 @@ def main(argc, argv):
     plt.scatter(x,y)
     plt.xlabel("Hints")
     plt.ylabel("Time to solve (ms)")
-    plt.suptitle("Time to Solve Matrix for n = 3")
+    plt.suptitle("Time to Solve Matrix for n = 2")
 
-    fig.savefig("nine.jpg")
+    fig.savefig("four.jpg")
 
     
     print "Worst Puzzle took " + str(worstTime) + "s"
